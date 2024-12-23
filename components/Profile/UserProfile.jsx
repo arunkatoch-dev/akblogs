@@ -73,13 +73,17 @@ const UserProfile = ({
           });
         }
       }
+      if (message === "failed") {
+        setLoading(false);
+        setHasMore(false);
+      }
     } catch (err) {
       setError(err.message);
+      throw new Error(err.message);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData();
   }, [page]);
@@ -137,12 +141,12 @@ const UserProfile = ({
             hasMore={hasMore}
             loader={<CircularSpinner />}
             endMessage={
-              <p className="text-center text-secondary-foreground animate-bounce">
+              <p className="w-full text-center text-secondary-foreground animate-bounce inline-flex py-8 items-center justify-center">
                 No more blogs to show
               </p>
             }
           >
-            {blogs &&
+            {blogs.length >= 1 &&
               blogs?.map((blog) => {
                 const { _id, title, blogData, thumbnail, createdAt } = blog;
                 const shortTitle = useStringTrim(title, 30);
